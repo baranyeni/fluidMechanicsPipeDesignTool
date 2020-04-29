@@ -4,24 +4,32 @@ import math
 import matplotlib.pyplot as plot
 
 class Calculate():
-    def main(self, gNumber = 11):
+    def main(self, gNumber = 8):
         firstDim = float(input('Dim range first : '))
         LastDim = float(input('Dim range last  : '))
 
-        L = 1000 + gNumber * 50                    # Length of the piping system
-        T = 5 + gNumber * 0.25                     # Height of discharge P_kWint from the lake and tank in distribution center
-        fLoss = 0.0003 * (gNumber * 50)            # Roughness of the pipe
-        p  = 1000                                  # Density of the fluid
+        L = 1000 + (gNumber * 50)                  # Length of the piping system
+        T = 5 + (gNumber * 0.25)                   # Height of discharge P_kWint from the lake and tank in distribution center
+        fLoss = 0.0003 * (gNumber + 50)            # Roughness of the pipe
+        p  = 997                                   # Density of the fluid
         g  = 9.81                                  # Gravity
-        fFactor  = 5                                     # Friction factor of piping system element
+        k  = 10.6 #5                                     # Friction factor of piping system element
         g  = 9.81                                  # Gravity
         lt = 0.01 * L                              # Length of the tank
         ht = 0.20 * T                              # Height of tank from baseline to the top of double bottom
         bt = 0.50 * lt                             # Beam of the tank
-        t  = (1000000 * ht) / g                    # Time
+        t  = 10000/((g/ht)**.5)                    # Time
         Q  = (lt * ht * bt) / t                    # Flow rate
         Viscosity = 0.001308                       # Dynamic viscosity
         Power, Cost, H_Loss, Dim = [], [], [], []  # Tuples to collect whole graph data
+
+        print("L =", L)
+        print("T =", T)
+        print("ht =", ht)
+        print("lt =", lt)
+        print("bt =", bt)
+        print("t =", t)
+        print("Q =", Q)
 
         if LastDim < firstDim:
             tempVariable = LastDim
@@ -40,9 +48,9 @@ class Calculate():
             else:
                 f = (1/(-1.8*(math.log10((((fLoss/D)/3.7)**1.11)+(6.9/Re)))))**2
 
-            H_Loss_1 = f * (L/D)*((V**2)/(2*g))
-            H_Loss_2 = fFactor * ((V**2)/(2*g))     
-            Ht = H_Loss_1 + H_Loss_2 + T           # Total headloss
+            H1 = f*(L/D)*((V**2)/(2*g))
+            H2 = k*((V**2)/(2*g))     
+            Ht = H1+H2+T                           # Total headloss
 
             P_kW = (p*Q*g*Ht)/1000                 # Power
 
@@ -59,14 +67,10 @@ class Calculate():
             Dim.append(D)
 
             firstDim = firstDim + 0.01             # Sample frequency
-
-        print(len(Dim))
-        print(len(Power))
-        print(len(H_Loss))
-        print(len(Cost))
         self.drawGraph(Dim, Power, H_Loss, Cost)
 
     def drawGraph(self, Dimension, Power, Headloss, Cost):
+        print(Dimension, Power, Headloss, Cost)
         plot.figure(num='Furkan Emre Durmus')
         plot.subplots_adjust(wspace=.5, hspace=.75)
         plot.style.use('ggplot')
