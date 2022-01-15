@@ -6,14 +6,14 @@ import matplotlib.pyplot as plot
 class Calculate():
     def main(self, gNumber = 8):
         firstDim = float(input('Dim range first : '))
-        LastDim = float(input('Dim range last  : '))
+        lastDim = float(input('Dim range last  : '))
 
         L = 1000 + (gNumber * 50)                  # Length of the piping system
         T = 5 + (gNumber * 0.25)                   # Height of discharge P_kWint from the lake and tank in distribution center
         fLoss = 0.0003 * (gNumber + 50)            # Roughness of the pipe
         p  = 997                                   # Density of the fluid
         g  = 9.81                                  # Gravity
-        k  = 10.6 #5                                     # Friction factor of piping system element
+        k  = 10.6 #5                               # Friction factor of piping system element
         g  = 9.81                                  # Gravity
         lt = 0.01 * L                              # Length of the tank
         ht = 0.20 * T                              # Height of tank from baseline to the top of double bottom
@@ -31,12 +31,12 @@ class Calculate():
         print("t =", t)
         print("Q =", Q)
 
-        if LastDim < firstDim:
-            tempVariable = LastDim
-            LastDim = firstDim
+        if lastDim < firstDim:
+            tempVariable = lastDim
+            lastDim = firstDim
             firstDim = tempVariable
 
-        while firstDim <= LastDim:
+        while firstDim <= lastDim:
             D = firstDim
             A = math.pi*((D/2)**2)                 # Area of pipe
             V = Q/A                                # Velocity of fluid
